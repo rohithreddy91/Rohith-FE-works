@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { useState } from "react";
 const User = (props) =>{
     const {name, age,location }= props
     const [count] = useState(0);

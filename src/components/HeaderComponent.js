@@ -1,14 +1,22 @@
-import { Link } from "react-router";
-import { CDN_URL}  from "../utils/constants";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { CDN_URL}  from "../utils/constants";
+import { useContext, useState } from "react";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
+import { useSelector } from "react-redux";
 
 const HeaderComponent = () => {
 
     const [loggedIn,setLoggedIn] = useState("login");
     const btnChanged = loggedIn
     const onlinStatus = useOnlineStatus();
+    const {loggingInUser} = useContext(UserContext);
+
+    const cartItems = useSelector((store)=>store.cart.items);
+    console.log("cartItems", cartItems);
+    
+    
+
 
   const header =  (
     <div className="flex justify-between items-center bg-pink-50 shadow-lg">
@@ -33,9 +41,15 @@ const HeaderComponent = () => {
             <li>
                 <Link to = "/grocery"> Grocery</Link>
             </li>
+            <li className="font-bold text-lg">
+                <Link to="/cart">
+                Cart({cartItems.length})
+                </Link>
+            </li>
              <button className="button-btn" onClick={ ()=> {
             btnChanged === "login"? setLoggedIn("logout") : setLoggedIn("login");
       }}> {btnChanged}</button>
+      <li>{loggingInUser}</li>
           </ul>
       </div>
   </div>
