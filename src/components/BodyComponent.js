@@ -1,15 +1,16 @@
 import CardsComponent,{WithRestaurantPromoted} from "./CardsComponent";// default imports
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, useContext } from "react";
 import SearchComponent from "./SearchComponent";// default imports
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";// custom hook
+import UserContext from "../utils/UserContext";
 
 
 const BodyComponent = () => {
 
     const [listOfRes, setlistOfRes] = useState([]);
     const [filtereddata, setFilteredData] = useState([]);
-    console.log("filtereddata", listOfRes);
+    //console.log("filtereddata", listOfRes);
     const onlinsStatus = useOnlineStatus();
 
     const WithRestaurantPromotedCards = WithRestaurantPromoted(CardsComponent);
@@ -23,6 +24,8 @@ const BodyComponent = () => {
         const listData = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9502882&lng=77.7045014&collection=83639&tags=layout_CCS_Biryani&sortBy=&filters=&type=rcv2&offset=0&page_type=null");
 
         const jsonData = await listData.json();
+        console.log(jsonData);
+        
         let card;
         let resultArray = [];
         for (let i = 3; i < jsonData?.data?.cards?.length; i++) {
@@ -49,6 +52,8 @@ const BodyComponent = () => {
                 return <h1> Status is offline !! Please check the internet connection.</h1>
             }
 
+            const {loggedInUser,setUserName } = useContext(UserContext);
+
     return (
         <div className="p-4">
             <div className="flex">
@@ -60,6 +65,12 @@ const BodyComponent = () => {
                 }}>
                     Filter By Rating
                 </button>
+                <div className="py-3">
+                    UserName :
+                    <input className="py-1 border border-black" text="input" 
+                    value={loggedInUser} 
+                    onChange={(e) => setUserName(e.target.value)} />
+                </div>
             </div>
             <div className="flex flex-wrap">
                 {
